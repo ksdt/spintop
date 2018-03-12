@@ -12,9 +12,11 @@ let songs = [];
 
 var parser = csv.parse({delimiter: ','}, function(err, data){
 
+    console.log(data[0]);
+
     let match = function(a, b) {
         return a[ARTIST_IDX].trim().toLowerCase() == b[ARTIST_IDX].trim().toLowerCase()
-            && a[SONG_IDX].trim().toLowerCase() == b[SONG_IDX].trim().toLowerCase()
+            //&& a[SONG_IDX].trim().toLowerCase() == b[SONG_IDX].trim().toLowerCase()
             && a[RECORD_IDX].trim().toLowerCase() == b[RECORD_IDX].trim().toLowerCase();
     }
 
