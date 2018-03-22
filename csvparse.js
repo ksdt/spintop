@@ -1,5 +1,6 @@
 var csv = require('csv');
 var fs = require('fs');
+var formidable = require('formidable');
 
 /* constants into csv */
 const ARTIST_IDX = 0;
@@ -11,6 +12,7 @@ const COUNT_IDX = 4;
 
 /* process the songs and store them in this arr */
 let songs = [];
+var songsLog = '';
 
 var parser = csv.parse({delimiter: ','}, function(err, data){
 
@@ -61,14 +63,22 @@ var parser = csv.parse({delimiter: ','}, function(err, data){
       };
     }
 
-    /* display it */
+    /* display it */ //send log back to server
+
     songs.forEach(song => {
-        console.log("{0} - {1} by {2}. Album: {3} Label: {4}".format(song[COUNT_IDX], song[SONG_IDX], song[ARTIST_IDX], song[RECORD_IDX], song[LABEL_IDX]));
+        songsLog += "{0} - {1} by {2}. Album: {3} Label: {4}".format(song[COUNT_IDX], song[SONG_IDX], song[ARTIST_IDX], song[RECORD_IDX], song[LABEL_IDX]) + '\n';
+        //console.log("{0} - {1} by {2}. Album: {3} Label: {4}".format(song[COUNT_IDX], song[SONG_IDX], song[ARTIST_IDX], song[RECORD_IDX], song[LABEL_IDX]));
 
     })
 
 
-
 });
-
-fs.createReadStream(__dirname+'/ksdt.csv').pipe(parser);
+module.exports = function(filePath) {
+    var stream = fs.createReadStream(filePath);
+    stream.pipe(parser);
+    //when the stream is done, songsLog is complete and ready to be returned
+    stream.on('close', function() {
+        console.log('returning');
+        return songsLog;
+    });
+};
