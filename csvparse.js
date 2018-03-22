@@ -66,19 +66,23 @@ var parser = csv.parse({delimiter: ','}, function(err, data){
     /* display it */ //send log back to server
 
     songs.forEach(song => {
-        songsLog += "{0} - {1} by {2}. Album: {3} Label: {4}".format(song[COUNT_IDX], song[SONG_IDX], song[ARTIST_IDX], song[RECORD_IDX], song[LABEL_IDX]) + '\n';
+        songsLog += "{0} - {1} by {2}. Album: {3} Label: {4}".format(song[COUNT_IDX], song[SONG_IDX], song[ARTIST_IDX], song[RECORD_IDX], song[LABEL_IDX]) + '<br>';
         //console.log("{0} - {1} by {2}. Album: {3} Label: {4}".format(song[COUNT_IDX], song[SONG_IDX], song[ARTIST_IDX], song[RECORD_IDX], song[LABEL_IDX]));
 
     })
 
 
 });
-module.exports = function(filePath) {
+
+
+
+module.exports = function(filePath, cb) {
     var stream = fs.createReadStream(filePath);
     stream.pipe(parser);
+    console.log("here");
     //when the stream is done, songsLog is complete and ready to be returned
     stream.on('close', function() {
         console.log('returning');
-        return songsLog;
+        cb(songsLog);
     });
 };

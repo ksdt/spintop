@@ -14,16 +14,13 @@ app.post('/upload', function(req, res) {
   var form = formidable.IncomingForm();
   form.parse(req,function(err, fields, files) {
   	if (err) throw err;
-  	res.write('file uploaded');
   	//get the path to the uploaded file for the parser to use
   	var filePath = files.spinFile.path;
 
-  	//TODO: fix this bug and then just output the data string
-  	//Why does this callback not execute????
-  	parser(filePath, function(err,data) {
+  	parser(filePath, function(data) {
   		console.log("data" + data);
-  		//res.send(data);
+  		res.send("<code>" + data + "</code>");
+        res.end();
   	});
-  	res.end();
   });
 });
