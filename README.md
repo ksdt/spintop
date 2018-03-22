@@ -4,11 +4,10 @@ spinitron export settings:
 
 ![alt text](https://raw.githubusercontent.com/ksdt/spintop/master/spinsettings.png)
 
-name it ksdt.csv and put it in the folder along with csvparse.js
-
-then run `node csvparse.js`
+run with 'node index.js'
+go to localhost:3000 and you will be presented with a form to upload a csv file
 
 
 
 todo
-* make it a web thing so other people can do it without using cli
+* fix the async bug which is stopping the server from getting the string of songs from the parser's callback function
