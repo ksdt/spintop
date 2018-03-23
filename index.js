@@ -1,13 +1,14 @@
 const express    = require('express');
 const app 	     = express();
 const path       = require('path');
+const port       = process.env.PORT || 3000;
 const formidable = require('formidable');
 const parser     = require('./csvparse.js');
 
 //send the index page on a get request
 app.get('*', (req, res) => res.sendFile(path.join(__dirname + "/index.html")))
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(port, () => console.log('Example app listening on port 3000!'))
 
 app.post('/upload', function(req, res) {
   //upload the file from the html form
