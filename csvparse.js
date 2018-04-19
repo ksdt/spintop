@@ -1,6 +1,5 @@
 var csv = require('csv');
 var fs = require('fs');
-var formidable = require('formidable');
 
 /* constants into csv */
 const ARTIST_IDX = 0;
@@ -15,7 +14,9 @@ let songs = [];
 var songsLog = '';
 
 var parser = csv.parse({delimiter: ','}, function(err, data){
-
+    songs = [];
+    songsLog = '';
+    try {
     /* test if two rows in csv file are the same. */
     let match = function(a, b) {
         return a[ARTIST_IDX].trim().toLowerCase() == b[ARTIST_IDX].trim().toLowerCase()
@@ -26,7 +27,8 @@ var parser = csv.parse({delimiter: ','}, function(err, data){
     /* iterate over all rows. for each entry, check if it matches any existing processed songs.
      * if so, increase the count variable. if not, set count variable to one and add it to
      * processed songs */
-    data.forEach(entry => {
+    
+            data.forEach(entry => {
         let found = false;
         for (var i = 0; i < songs.length; i++) {
             if (match(songs[i], entry)) {
@@ -71,18 +73,21 @@ var parser = csv.parse({delimiter: ','}, function(err, data){
 
     })
 
-
+     }
+     catch(err) {
+        console.log("second time err");
+        songsLog = null;
+     }
 });
 
 
 
 module.exports = function(filePath, cb) {
     var stream = fs.createReadStream(filePath);
+
     stream.pipe(parser);
-    console.log("here");
     //when the stream is done, songsLog is complete and ready to be returned
     stream.on('close', function() {
-        console.log('returning');
         cb(songsLog);
     });
 };
